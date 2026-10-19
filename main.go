@@ -1,9 +1,13 @@
 package main
 
 import(
-	"fmt"
+
 )
 
 func main() {
-	fmt.Print("Hello, World!")
+	cfg := config{
+		commands: getCommands(),
+	}
+	
+	startRepl(&cfg)
 }
