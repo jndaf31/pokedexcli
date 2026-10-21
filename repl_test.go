@@ -6,14 +6,14 @@ import (
 
 func TestCleanInput(t *testing.T) {
 	cases := []struct {
-		input 	string
+		input    string
 		expected []string
 	}{
-		{input: " hello world ", expected: []string{"hello", "world"}, },
-		{input: "  hello   WORLD   ", expected: []string{"hello", "world"}, },
-		{input: "HELLO WoRLd", expected: []string{"hello", "world"}, },
-		{input: "hello the world", expected: []string{"hello", "the" , "world"}, },
-		{input: "helloworld", expected: []string{"helloworld"}, },
+		{input: " hello world ", expected: []string{"hello", "world"}},
+		{input: "  hello   WORLD   ", expected: []string{"hello", "world"}},
+		{input: "HELLO WoRLd", expected: []string{"hello", "world"}},
+		{input: "hello the world", expected: []string{"hello", "the", "world"}},
+		{input: "helloworld", expected: []string{"helloworld"}},
 	}
 
 	for _, c := range cases {
@@ -31,6 +31,4 @@ func TestCleanInput(t *testing.T) {
 			}
 		}
 	}
-
-	
 }

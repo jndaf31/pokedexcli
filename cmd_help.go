@@ -1,8 +1,9 @@
 package main
 
-import(
+import (
 	"fmt"
 )
+
 func commandHelp(cfg *config) error {
 	fmt.Print("Welcome to the Pokedex!\nUsage:\n\n")
 	for _, cmd := range cfg.commands {
