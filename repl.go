@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"github.com/jndaf31/pokedexcli/internal/pokecache"
+	"github.com/jndaf31/pokedexcli/internal/pokeapi"
 )
 
 type cliCommand struct {
@@ -15,10 +15,10 @@ type cliCommand struct {
 }
 
 type config struct {
-	commands          map[string]cliCommand
-	locationArea_Prev string
-	locationArea_Next string
-	cache             *pokecache.Cache
+	commands          	map[string]cliCommand
+	client 				pokeapi.Client
+	locationArea_Prev 	*string
+	locationArea_Next 	*string
 }
 
 func startRepl(cfg *config) {
@@ -60,13 +60,8 @@ func getCommands() map[string]cliCommand {
 		},
 		"map": {
 			name:        "map",
-			description: "Displays the next page of location areas in the Pokemon world",
+			description: "Displays a page of location areas in the Pokemon world. 'mapb' for previous page.",
 			callback:    commandMap,
-		},
-		"mapb": {
-			name:        "mapb",
-			description: "Displays the previous page of location areas in the Pokemon world",
-			callback:    commandMapb,
 		},
 	}
 }

@@ -5,57 +5,42 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-
-	pokeapi "github.com/jndaf31/pokedexcli/internal/pokecache"
 )
 
-func GetLocationArea(url string, c *pokeapi.Cache) ([]string, error) {
-	var rspJson struct {
-		Count    int     `json:"count"`
-		Next     *string `json:"next"`
-		Previous *string `json:"previous"`
-		Results  []struct {
-			Name string `json:"name"`
-			Url  string `json:"url"`
-		} `json:"results"`
+func (c *Client) GetLocationArea(reqUrl *string) (rspLocationArea, error) {
+	url := baseUrl
+	if reqUrl != nil {
+		url = *reqUrl
 	}
-
-	if _, exists := c.Get(url); !exists {
-		response, err := http.Get(url)
+	if _, exists := c.cache.Get(url); !exists {
+		request, err := http.NewRequest("GET",url,nil)
 		if err != nil {
-			return []string{}, err
+			return rspLocationArea{}, err
 		}
+		response, err := c.httpClient.Do(request)
+		if err != nil {
+			return rspLocationArea{}, err
+		}
+		
 		if response.StatusCode > 299 {
-			return []string{}, fmt.Errorf("Error: %v", response.StatusCode)
+			return rspLocationArea{}, fmt.Errorf("Error: %v", response.StatusCode)
 		}
 
 		response_b, err := io.ReadAll(response.Body)
 		defer response.Body.Close()
 		if err != nil {
-			return []string{}, err
+			return rspLocationArea{}, err
 		}
 
-		c.Add(url, response_b)
+		c.cache.Add(url, response_b)
 	}
 
-	rsp, _ := c.Get(url)
-	err := json.Unmarshal(rsp, &rspJson)
+	rsp, _ := c.cache.Get(url)
+	locations := rspLocationArea{}
+	err := json.Unmarshal(rsp, &locations)
 	if err != nil {
-		return []string{}, err
+		return rspLocationArea{}, err
 	}
 
-	urlPrev := ""
-	urlNext := ""
-	if rspJson.Previous != nil {
-		urlPrev = *rspJson.Previous
-	}
-	if rspJson.Next != nil {
-		urlNext = *rspJson.Next
-	}
-	locList := []string{"", urlPrev, urlNext}
-	for _, res := range rspJson.Results {
-		locList[0] += fmt.Sprintln(res.Name)
-	}
-
-	return locList, nil
+	return locations, nil
 }

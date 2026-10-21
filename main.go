@@ -1,17 +1,16 @@
 package main
 
 import (
-	"github.com/jndaf31/pokedexcli/internal/pokecache"
+	"time"
+
+	"github.com/jndaf31/pokedexcli/internal/pokeapi"
 )
 
 func main() {
-
 	cfg := config{
-		commands:          getCommands(),
-		locationArea_Prev: "",
-		locationArea_Next: "https://pokeapi.co/api/v2/location-area/",
-		cache:             pokecache.NewCache(5),
-	}
+		commands:          	getCommands(),
+		client:				pokeapi.NewClient(5 * time.Second, 5* time.Minute),
+}
 
 	startRepl(&cfg)
 }
