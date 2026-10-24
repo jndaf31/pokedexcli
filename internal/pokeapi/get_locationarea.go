@@ -2,45 +2,34 @@ package pokeapi
 
 import (
 	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
+	"net/url"
 )
 
-func (c *Client) GetLocationArea(reqUrl *string) (rspLocationArea, error) {
-	url := baseUrl
-	if reqUrl != nil {
-		url = *reqUrl
+func (c *Client) GetLocationArea(reqURL *string) (rspLocationArea, error) {
+	var rsp rspLocationArea
+	
+	endpoint := baseURL + "/location-area"
+	if reqURL != nil {
+		endpoint = *reqURL
 	}
-	if _, exists := c.cache.Get(url); !exists {
-		request, err := http.NewRequest("GET",url,nil)
-		if err != nil {
-			return rspLocationArea{}, err
-		}
-		response, err := c.httpClient.Do(request)
-		if err != nil {
-			return rspLocationArea{}, err
-		}
-		
-		if response.StatusCode > 299 {
-			return rspLocationArea{}, fmt.Errorf("Error: %v", response.StatusCode)
-		}
-
-		response_b, err := io.ReadAll(response.Body)
-		defer response.Body.Close()
-		if err != nil {
-			return rspLocationArea{}, err
-		}
-
-		c.cache.Add(url, response_b)
-	}
-
-	rsp, _ := c.cache.Get(url)
-	locations := rspLocationArea{}
-	err := json.Unmarshal(rsp, &locations)
+	
+	body, err := c.get(endpoint)
 	if err != nil {
-		return rspLocationArea{}, err
+		return rsp, err
 	}
+	
+	return rsp, json.Unmarshal(body, &rsp)
+}
 
-	return locations, nil
+func (c *Client) GetLocationAreaDetails(locName string) (rspLocationAreaDetails, error) {
+	var rsp rspLocationAreaDetails
+	
+	endpoint := baseURL + "/location-area/" + url.PathEscape(locName)
+
+	body, err := c.get(endpoint)
+	if err != nil {
+		return rsp, err
+	}
+	
+	return rsp, json.Unmarshal(body, &rsp)
 }
