@@ -24,10 +24,10 @@ func TestCleanInput(t *testing.T) {
 		}
 		for i := range actual {
 			wrd := actual[i]
-			exp_wrd := c.expected[i]
+			expWrd := c.expected[i]
 
-			if wrd != exp_wrd {
-				t.Errorf("results don't match. expected: %v actual: %v", exp_wrd, wrd)
+			if wrd != expWrd {
+				t.Errorf("results don't match. expected: %v actual: %v", expWrd, wrd)
 			}
 		}
 	}

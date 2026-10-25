@@ -16,11 +16,11 @@ type cliCommand struct {
 }
 
 type config struct {
-	commands          	map[string]cliCommand
-	client 				pokeapi.Client
-	locationArea_Prev 	*string
-	locationArea_Next 	*string
-	pokedex				map[string]pokeapi.Pokemon
+	commands         map[string]cliCommand
+	client           pokeapi.Client
+	locationareaPrev *string
+	locationareaNext *string
+	pokedex          map[string]pokeapi.Pokemon
 }
 
 func startRepl(cfg *config) {
@@ -34,12 +34,12 @@ func startRepl(cfg *config) {
 				continue
 			}
 			cmd, ok := cfg.commands[cIn[0]]
-			args := []string{}
+			var args []string
 			if len(cIn) > 1 {
 				args = cIn[1:]
 			}
 			if ok {
-				err := cmd.callback(cfg,args...)
+				err := cmd.callback(cfg, args...)
 				if err != nil {
 					fmt.Printf("Error: %s\n", err)
 				}
