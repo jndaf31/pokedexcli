@@ -8,10 +8,10 @@ import (
 
 func main() {
 	cfg := config{
-		commands:          	getCommands(),
-		pokedex:			map[string]pokeapi.Pokemon{},
-		client:				pokeapi.NewClient(5 * time.Second, 5* time.Minute),
-}
+		commands: getCommands(),
+		pokedex:  map[string]pokeapi.Pokemon{},
+		client:   pokeapi.NewClient(5*time.Second, 5*time.Minute),
+	}
 
 	startRepl(&cfg)
 }

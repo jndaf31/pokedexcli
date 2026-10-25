@@ -24,6 +24,7 @@ func (c *Client) get(endpoint string) ([]byte, error) {
 	if err != nil {
 		return []byte{}, err
 	}
+	//goland:noinspection GoUnhandledErrorResult
 	defer response.Body.Close()
 
 	if response.StatusCode > 299 {

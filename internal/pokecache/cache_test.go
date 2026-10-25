@@ -64,9 +64,9 @@ func TestReapLoop(t *testing.T) {
 
 func TestReapManyAdds(t *testing.T) {
 	cache := pokecache.NewCache(5 * time.Millisecond)
-	for i:= range 5 {
+	for i := range 5 {
 		cache.Add(
-			fmt.Sprintf("key-%d",i),
+			fmt.Sprintf("key-%d", i),
 			[]byte("v"))
 	}
 	time.Sleep(10 * 5 * time.Millisecond)
@@ -81,9 +81,9 @@ func TestReapManyAdds(t *testing.T) {
 	}()
 
 	select {
-		case<-done:
-		case<-time.After(2 * time.Second):
-			t.Errorf("cache deadlocked: no later Add/Get after 2 seconds.")
+	case <-done:
+	case <-time.After(2 * time.Second):
+		t.Errorf("cache deadlocked: no later Add/Get after 2 seconds.")
 	}
 
 }
