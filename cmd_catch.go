@@ -20,6 +20,7 @@ func commandCatch(cfg *config, args ...string) error {
 
 	if roll > rsp.BaseExperience {
 		fmt.Println(rsp.Name, "was caught!")
+		fmt.Println(rsp.Name, "You may now inspect it with the inspect command.")
 		cfg.pokedex[rsp.Name] = rsp
 	} else {
 		fmt.Println(rsp.Name, "escaped!")
